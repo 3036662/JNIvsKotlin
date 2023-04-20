@@ -9,10 +9,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -35,6 +34,7 @@ fun AppScreen(modifier: Modifier=Modifier){
     val viewModel: AppViewModel = viewModel()
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
+    var sliderPosition by remember { mutableStateOf(0f) }
     Column(
             modifier
                 .fillMaxWidth()//
@@ -43,6 +43,9 @@ fun AppScreen(modifier: Modifier=Modifier){
             verticalArrangement = Arrangement.Center
         ) {
 
+
+    // Show two button Calculate
+    //--------------------------------------------------
             if (!uiState.kotlinCalcInProgress && !uiState.pngInProgress) {
                 Button(
                     modifier = modifier.padding(20.dp),
@@ -60,8 +63,8 @@ fun AppScreen(modifier: Modifier=Modifier){
                 Text("Time :${uiState.kotlinCalcTime} ms")
                 Text("${uiState.kotlinPointsFound} points found")
             }
-
-            // native
+    //--------------------------------------------------
+    // Calculation process animation
 
             if (!uiState.nativeCalcInProgress && !uiState.pngInProgress) {
                 Button(
@@ -83,7 +86,9 @@ fun AppScreen(modifier: Modifier=Modifier){
                 Text("Time :${uiState.nativeCalcTime} ms")
             }
 
-            // create Png
+    //--------------------------------------------------
+    // create Png button
+
             if (uiState.nativeCalcFinished && uiState.kotlinCalcFinished) {
                 Button(modifier = modifier.padding(20.dp), onClick = { viewModel.createPngs() }) {
                     Text(stringResource(R.string.create_png))
@@ -93,7 +98,9 @@ fun AppScreen(modifier: Modifier=Modifier){
                 LoadingAnimation2()
                 Text("Creating png files...")
             }
-            // show pngs
+
+            // show generated Images
+
             if (uiState.pngReady &&
                 File("${LocalContext.current.filesDir}/$KOTLINPNG").exists() &&
                 File("${LocalContext.current.filesDir}/$CPPPNG").exists()
@@ -119,9 +126,5 @@ fun AppScreen(modifier: Modifier=Modifier){
                     )
                 }
             }
-
-
     }
-
-
 }

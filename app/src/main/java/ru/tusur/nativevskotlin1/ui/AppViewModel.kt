@@ -45,7 +45,7 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
 
     private  fun processKotlinCalc(){
         val mandelbrot= Mandelbrot()
-        points = mandelbrot.calc(SCR_WIDTH, SCR_HEIGHT, xStart, xEnd, yStart, yEnd, MAX_ITER)
+        points = mandelbrot.calc( xStart, xEnd, yStart, yEnd, MAX_ITER)
     }
 
     // Calculate Mandelbrot with C++

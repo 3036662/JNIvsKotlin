@@ -15,17 +15,13 @@ Mandelbrot::Mandelbrot()
     points.reserve(300000);
 }
 
-std::pair<size_t,double*> Mandelbrot::calc(const int width,const int height,const double start_x,const double end_x,const double start_y,const double end_y,unsigned int max_iter){
+std::pair<size_t,double*> Mandelbrot::calc(const double start_x,const double end_x,const double start_y,const double end_y,unsigned int max_iter){
     points.clear();
     // рассчет шага
     const  int HD_WIDTH=1920;
     const  int HD_HEIGHT=1280;
     double step_x=(end_x-start_x)/HD_WIDTH;
     double step_y=(end_y-start_y)/HD_HEIGHT;
-    if (height>HD_HEIGHT || width>HD_WIDTH){
-        step_x=(end_x-start_x)/width;
-        step_y=(end_y-start_y)/height;
-    }
 
     int iterNumb=0;
     // пройти все точки с нужным шагом

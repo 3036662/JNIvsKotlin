@@ -23,7 +23,7 @@ extern "C" JNIEXPORT jdoubleArray  JNICALL Java_ru_tusur_nativevskotlin1_ui_AppV
     Mandelbrot  fractal;
     // пара -количество элементов в массиве,  указатель на массив точек point
     std::pair<size_t,double*> points;
-    points=fractal.calc(SCR_WIDTH,SCR_HEIGHT,X_START,X_END,Y_START,Y_END,MAX_ITER);
+    points=fractal.calc(X_START,X_END,Y_START,Y_END,MAX_ITER);
 
     // prepare Array for Java
 

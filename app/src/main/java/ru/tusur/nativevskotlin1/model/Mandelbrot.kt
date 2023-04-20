@@ -12,8 +12,6 @@ class Mandelbrot {
     private var points: ArrayList<Double> = ArrayList(300000);
 
      fun calc(
-        width : Int,
-        height : Int,
         startX : Double,
         endX : Double,
         startY : Double,
@@ -25,14 +23,9 @@ class Mandelbrot {
         var iterNumb:Int=0; //total iterations
         val stepX:Double
         val stepY:Double
-        if (height>HD_HEIGHT || width>HD_WIDTH){
-            stepX=(endX-startX)/width;
-            stepY=(endY-startY)/height;
-        }
-        else{
-            stepX= (endX-startX)/HD_WIDTH
-            stepY=(endY-startY)/HD_HEIGHT
-        }
+
+        stepX= (endX-startX)/HD_WIDTH
+        stepY=(endY-startY)/HD_HEIGHT
         // пройти все точки с нужным шагом
         var x=startX
         while(x<=endX){
