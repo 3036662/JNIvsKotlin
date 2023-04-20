@@ -14,10 +14,10 @@ import ru.tusur.nativevskotlin1.yEnd
 import ru.tusur.nativevskotlin1.yStart
 
 
-const val filename = "myfile.png"
 
 
-fun buildPNG(points: Pair<Int, List<Double>>,context:Context) {
+
+fun buildPNG(points: List<Double>,context:Context,filename:String) {
        // val outputStream = ByteArrayOutputStream() // output stream
        // val file = File(context.filesDir, filename)
        val outputStream=context.openFileOutput(filename, Context.MODE_PRIVATE)
@@ -37,27 +37,27 @@ fun buildPNG(points: Pair<Int, List<Double>>,context:Context) {
         while (x < xEnd) {
             var y = yStart
             while (y <= yEnd) {
-                var r = 255;
-                var g = 255;
-                var b = 255  // rgb
-                if (points.second[i] == x && points.second[i + 1] == y) { // blue a point
-                    if (i+2<points.first){i += 2}
-                    r = 0;g = 0;
+                var r = 255
+                var g = 255
+                val b = 255  // rgb
+                if (points[i] == x && points[i + 1] == y) { // blue a point
+                    if (i+2<points.size){i += 2}
+                    r = 0;g = 0
                 }
                 ImageLineHelper.setPixelRGB8(iline, col, r, g, b)
                 ++col
                 y += stepY
             }
             //write Line
-            Log.d(" ru.tusur.nativevskotlin1 ","${iline.size} col=$col row=$row")
+           //s Log.d(" ru.tusur.nativevskotlin1 ","${iline.size} col=$col row=$row")
             if (row<imageInfo.rows && col<=imageInfo.cols) {
                 pngWriter.writeRow(iline)
             }
             row++
-            col=0;
+            col=0
             x += stepX
         }
         pngWriter.end()
-        Log.d("storage",context.getFilesDir().toString())
+        Log.d("storage",context.filesDir.toString())
 
 }

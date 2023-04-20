@@ -9,5 +9,7 @@ data class UiState(
     val nativeCalcTime:Long=0,
     val kotlinPointsFound:Int=0,
     val nativePointsFound:Int=0,
+    val pngInProgress:Boolean=false,
+    val pngReady:Boolean=false
 
 )

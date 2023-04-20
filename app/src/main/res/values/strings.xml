@@ -5,4 +5,5 @@
     <string name="calc_finished">Kotlin Mandelbrot calculation is finished</string>
     <string name="calculate_with_cpp">Calculate with C++</string>
     <string name="native_is_calculating">C++  is calculating points...</string>
+    <string name="create_png">Create PNGs</string>
 </resources>

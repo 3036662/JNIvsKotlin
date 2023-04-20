@@ -14,19 +14,18 @@ import kotlinx.coroutines.withContext
 import ru.tusur.nativevskotlin1.*
 import ru.tusur.nativevskotlin1.model.Mandelbrot
 import ru.tusur.nativevskotlin1.model.UiState
-import java.util.*
-import kotlin.collections.ArrayList
+import ru.tusur.nativevskotlin1.png.buildPNG
 import kotlin.system.measureTimeMillis
+
+const val KOTLINPNG:String= "kotlinMandelbrot.png"
+const val  CPPPNG:String ="cppMandelbrot.png"
 
 class AppViewModel( application: Application): AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-
-
-    private var points: Pair<Int,ArrayList<Double>>?=null
-    private var pointsCpp: Pair<Int,List<Double>>?=null
-    private var lastKotlinCalcTimer:Long=0
+    private var points: List<Double>?=null
+    private var pointsCpp: List<Double>?=null
 
 
     // Calculate Mandelbrot with Kotlin
@@ -37,22 +36,20 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
             _uiState.update { it.copy(kotlinCalcInProgress=true) }
            val timerKotlinCalc=measureTimeMillis {
                withContext(Dispatchers.Default) {
-                    processKotlinCalc();
+                    processKotlinCalc()
                 }
             }
-            _uiState.update { it.copy(kotlinCalcInProgress=false,kotlinCalcFinished=true, kotlinCalcTime = timerKotlinCalc, kotlinPointsFound = points?.first ?:0) }
+            _uiState.update { it.copy(kotlinCalcInProgress=false,kotlinCalcFinished=true, kotlinCalcTime = timerKotlinCalc, kotlinPointsFound = points?.size ?:0) }
         }
     }
 
-    private suspend fun processKotlinCalc(){
+    private  fun processKotlinCalc(){
         val mandelbrot= Mandelbrot()
         points = mandelbrot.calc(SCR_WIDTH, SCR_HEIGHT, xStart, xEnd, yStart, yEnd, MAX_ITER)
-        //buildPNG(points, context= this.getApplication())
     }
 
     // Calculate Mandelbrot with C++
     //-------------------------------------------
-
     fun launchNativeCalc(){
         viewModelScope.launch {
             _uiState.update { it.copy(nativeCalcInProgress =true) }
@@ -61,22 +58,35 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
                     processNativeCalc()
                 }
             }
-            _uiState.update { it.copy(nativeCalcInProgress=false,nativeCalcFinished=true, nativeCalcTime = timeCPPCalc, nativePointsFound = pointsCpp?.first ?: 0)  }
+            _uiState.update { it.copy(nativeCalcInProgress=false,nativeCalcFinished=true, nativeCalcTime = timeCPPCalc, nativePointsFound = pointsCpp?.size ?: 0)  }
         }
     }
 
 
     private external fun arrFromJNI(): DoubleArray
 
-    private suspend fun processNativeCalc(){
+    private  fun processNativeCalc(){
         val arr=arrFromJNI()
         val timeConversion= measureTimeMillis {
             val arrList= arr.asList()
-            pointsCpp=Pair(arr.size,arrList)
+            pointsCpp=arrList
         }
         Log.d("Conversion time","time = $timeConversion")
     }
 
-
+    // Create Pngs
+    //----------------------------
+    fun createPngs(){
+        viewModelScope.launch {
+            _uiState.update { it.copy(pngInProgress = true) }
+            withContext(Dispatchers.Default){
+                if (points!=null && pointsCpp!=null) {
+                    buildPNG(points!!, getApplication(), KOTLINPNG)
+                    buildPNG(pointsCpp!!,getApplication(), CPPPNG)
+                }
+            }
+            _uiState.update { it.copy(pngInProgress = false, pngReady = true) }
+        }
+    }
 
 }

@@ -5,6 +5,9 @@
 #include "Mandelbrot.h"
 #include "Complex.h"
 #include <iostream>
+#include <string>
+
+#include <android/log.h>
 
 Mandelbrot::Mandelbrot()
 {
@@ -24,6 +27,7 @@ std::pair<size_t,double*> Mandelbrot::calc(const int width,const int height,cons
         step_y=(end_y-start_y)/height;
     }
 
+    int iterNumb=0;
     // пройти все точки с нужным шагом
     for (double x=start_x;x<=end_x;x+=step_x){
         for (double y=start_y;y<=end_y;y+=step_y){
@@ -32,6 +36,7 @@ std::pair<size_t,double*> Mandelbrot::calc(const int width,const int height,cons
             while (i<max_iter && sqr_abs(cn)<=4){
                 cn=square(cn)+Complex(x,y);
                 ++i;
+                ++iterNumb;
             }
             if (sqr_abs(cn)<=4){
                 points.push_back(x);
@@ -39,6 +44,8 @@ std::pair<size_t,double*> Mandelbrot::calc(const int width,const int height,cons
             }
         }
     }
+    const std::string strLog="iterations number"+std::to_string(iterNumb);
+    __android_log_print(ANDROID_LOG_VERBOSE, "Native VS Kotlin","Iteration number %d",iterNumb);
 
    // std::cout<<"Найдено точек "<<points.size()/2<<std::endl;
     return std::make_pair(points.size(),points.data());

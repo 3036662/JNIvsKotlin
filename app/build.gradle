@@ -85,6 +85,7 @@ dependencies {
     implementation 'androidx.compose.material3:material3:1.1.0-beta02'
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1" //viewModel
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("io.coil-kt:coil-compose:2.3.0") //coil
 
     implementation files('libs/pngj-2.1.1.jar')
 

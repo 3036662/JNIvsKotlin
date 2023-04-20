@@ -1,5 +1,7 @@
 package ru.tusur.nativevskotlin1.model
 
+import android.util.Log
+
 const  val HD_WIDTH=1920
 const  val HD_HEIGHT=1280
 
@@ -9,7 +11,7 @@ class Mandelbrot {
     // подготовить vector так как зранее неизвестно количество точек для закрашивания
     private var points: ArrayList<Double> = ArrayList(300000);
 
-    public fun calc(
+     fun calc(
         width : Int,
         height : Int,
         startX : Double,
@@ -17,8 +19,10 @@ class Mandelbrot {
         startY : Double,
         endY : Double,
         maxIter : Int
-    ):Pair<Int,ArrayList<Double>>{
+    ):List<Double>{
         points.clear()
+
+        var iterNumb:Int=0; //total iterations
         val stepX:Double
         val stepY:Double
         if (height>HD_HEIGHT || width>HD_WIDTH){
@@ -39,6 +43,7 @@ class Mandelbrot {
                 while (i<maxIter && sqrAbs(cn)<4){
                         cn = square(cn)+Complex(x,y)
                         ++i
+                    ++iterNumb
                 }
                 if (sqrAbs(cn)<=4){
                     points.add(x);
@@ -49,8 +54,9 @@ class Mandelbrot {
             x+=stepX
         }
 
-       // Log.d("Mandelbrot","Found ${points.size/2} points")
-        return Pair(points.size,points)
+        Log.d("Native VS Kotlin","Kotlin iterations number =$iterNumb")
+        //return Pair(points.size,points)
+      return points
     }
 
 
