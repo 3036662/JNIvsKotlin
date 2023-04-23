@@ -11,5 +11,4 @@ data class UiState(
     val nativePointsFound:Int=0,
     val pngInProgress:Boolean=false,
     val pngReady:Boolean=false
-
 )

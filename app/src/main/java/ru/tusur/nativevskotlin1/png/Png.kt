@@ -8,13 +8,10 @@ import ar.com.hjg.pngj.ImageLineInt
 import ar.com.hjg.pngj.PngWriter
 import ru.tusur.nativevskotlin1.model.HD_HEIGHT
 import ru.tusur.nativevskotlin1.model.HD_WIDTH
-import ru.tusur.nativevskotlin1.xEnd
-import ru.tusur.nativevskotlin1.xStart
-import ru.tusur.nativevskotlin1.yEnd
-import ru.tusur.nativevskotlin1.yStart
-
-
-
+import ru.tusur.nativevskotlin1.ui.xEnd
+import ru.tusur.nativevskotlin1.ui.xStart
+import ru.tusur.nativevskotlin1.ui.yEnd
+import ru.tusur.nativevskotlin1.ui.yStart
 
 
 fun buildPNG(points: List<Double>,context:Context,filename:String) {

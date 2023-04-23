@@ -11,11 +11,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.tusur.nativevskotlin1.*
 import ru.tusur.nativevskotlin1.model.Mandelbrot
 import ru.tusur.nativevskotlin1.model.UiState
 import ru.tusur.nativevskotlin1.png.buildPNG
 import kotlin.system.measureTimeMillis
+
+const val xStart:Double=-2.0
+const val xEnd:Double=1.0
+const val yStart:Double=-1.0
+const val yEnd:Double=1.0
+const val MAX_ITER:Int=200
+
 
 const val KOTLINPNG:String= "kotlinMandelbrot.png"
 const val  CPPPNG:String ="cppMandelbrot.png"
@@ -31,13 +37,14 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
     // Calculate Mandelbrot with Kotlin
     //-------------------------------------------
 
-    fun launchKotlinCalc(){
-        viewModelScope.launch {
+     fun launchKotlinCalc(){
+
+        viewModelScope.launch {//(Dispatchers.Main) could be used instead of withContext
             _uiState.update { it.copy(kotlinCalcInProgress=true) }
            val timerKotlinCalc=measureTimeMillis {
                withContext(Dispatchers.Default) {
                     processKotlinCalc()
-                }
+               }
             }
             _uiState.update { it.copy(kotlinCalcInProgress=false,kotlinCalcFinished=true, kotlinCalcTime = timerKotlinCalc, kotlinPointsFound = points?.size ?:0) }
         }

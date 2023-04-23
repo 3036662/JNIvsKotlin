@@ -1,6 +1,8 @@
 package ru.tusur.nativevskotlin1.model
 
 import android.util.Log
+import java.util.*
+import kotlin.collections.ArrayList
 
 const  val HD_WIDTH=1920
 const  val HD_HEIGHT=1280
