@@ -40,10 +40,8 @@ std::pair<size_t,double*> Mandelbrot::calc(const double start_x,const double end
             }
         }
     }
-    const std::string strLog="iterations number"+std::to_string(iterNumb);
     __android_log_print(ANDROID_LOG_VERBOSE, "Native VS Kotlin","Iteration number %d",iterNumb);
 
-   // std::cout<<"Найдено точек "<<points.size()/2<<std::endl;
     return std::make_pair(points.size(),points.data());
 }
 

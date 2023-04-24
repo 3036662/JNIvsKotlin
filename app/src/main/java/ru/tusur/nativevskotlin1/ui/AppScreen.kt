@@ -3,6 +3,7 @@ package ru.tusur.nativevskotlin1.ui
 
 
 
+import android.util.Log
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -35,6 +36,8 @@ fun AppScreen(modifier: Modifier=Modifier){
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
     var sliderPosition by remember { mutableStateOf(0f) }
+
+
     Column(
             modifier
                 .fillMaxWidth()//
@@ -43,7 +46,8 @@ fun AppScreen(modifier: Modifier=Modifier){
             verticalArrangement = Arrangement.Center
         ) {
 
-
+        Text(text = "JVM Machine version = ${System.getProperty("java.vm.version")}")
+        Text(text= "JAVA Home dir = ${System.getProperty("java.home")}")
     // Show two button Calculate
     //--------------------------------------------------
             if (!uiState.kotlinCalcInProgress && !uiState.pngInProgress) {

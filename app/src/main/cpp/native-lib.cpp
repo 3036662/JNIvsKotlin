@@ -29,9 +29,7 @@ extern "C" JNIEXPORT jdoubleArray  JNICALL Java_ru_tusur_nativevskotlin1_ui_AppV
 
     jdoubleArray arr=   env->NewDoubleArray(points.first);
     env->SetDoubleArrayRegion(arr,0,points.first,points.second);
+    //env->ReleaseDoubleArrayElements(arr)
 
     return arr;
-    //std::string hello = "Hello from C++";
-
-    //return env->NewStringUTF(hello.c_str());
 }

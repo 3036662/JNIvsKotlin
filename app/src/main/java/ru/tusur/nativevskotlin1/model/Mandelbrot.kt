@@ -21,7 +21,6 @@ class Mandelbrot {
         maxIter : Int
     ):List<Double>{
         points.clear()
-
         var iterNumb:Int=0; //total iterations
         val stepX:Double
         val stepY:Double
