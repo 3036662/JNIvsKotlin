@@ -35,14 +35,22 @@ std::pair<size_t,double*> Mandelbrot::calc(const double start_x,const double end
                 ++iterNumb;
             }
             if (sqr_abs(cn)<=4){
-                points.push_back(x);
-                points.push_back(y);
+                points.emplace_back(std::make_unique<double>(x));
+                points.emplace_back(std::make_unique<double>(y));
+               // points.push_back(x);
+                //points.push_back(y);
             }
         }
     }
     __android_log_print(ANDROID_LOG_VERBOSE, "Native VS Kotlin","Iteration number %d",iterNumb);
+    __android_log_print(ANDROID_LOG_VERBOSE, "Native VS Kotlin","points size %d",points.size());
 
-    return std::make_pair(points.size(),points.data());
+    resVector.reserve(points.size());
+    for (auto it=points.begin();it!=points.end();++it){
+        resVector.push_back(**it);
+    }
+    __android_log_print(ANDROID_LOG_VERBOSE, "Native VS Kotlin","result vector size %d",resVector.size());
+    return std::make_pair(resVector.size(),resVector.data());
 }
 
 

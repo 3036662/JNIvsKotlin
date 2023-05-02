@@ -16,7 +16,8 @@ public:
     ~Mandelbrot();
 
 private:
-    std::vector<double> points;
-
+   // std::vector<double> points;
+   std::vector<std::unique_ptr<double>> points;
+   std::vector<double> resVector;
 };
 #endif //NATIVE_VS_KOTLIN_1_MANDELBROT_H

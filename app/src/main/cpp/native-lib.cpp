@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <string>
+#include <android/log.h>
 #include "Mandelbrot.h"
 
 // Константы
@@ -27,8 +28,10 @@ extern "C" JNIEXPORT jdoubleArray  JNICALL Java_ru_tusur_nativevskotlin1_ui_AppV
 
     // prepare Array for Java
 
-    jdoubleArray arr=   env->NewDoubleArray(points.first);
+    jdoubleArray arr=   env->NewDoubleArray(points.first+10);
+    __android_log_print(ANDROID_LOG_VERBOSE, "Native VS Kotlin","Created java arr %d",points.first);
     env->SetDoubleArrayRegion(arr,0,points.first,points.second);
+    __android_log_print(ANDROID_LOG_VERBOSE, "Native VS Kotlin","Copied %d",points.first);
     //env->ReleaseDoubleArrayElements(arr)
 
     return arr;
