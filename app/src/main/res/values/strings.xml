@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Native vs Kotlin 1</string>
     <string name="launch_kotlinButton">Calculate with Kotlin</string>
+    <string name="launch_optimized_kotlinButton">Calculate with Kotlin optimized</string>
     <string name="kotlin_in_progress">Kotlin is calculating points…</string>
     <string name="calc_finished">Kotlin Mandelbrot calculation is finished</string>
+    <string name="calc_optimized_finished">Kotlin Mandelbrot optimized calculation is finished</string>
     <string name="calculate_with_cpp">Calculate with C++</string>
     <string name="native_is_calculating">C++  is calculating points...</string>
     <string name="create_png">Create PNGs</string>
