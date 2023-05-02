@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.tusur.nativevskotlin1.model.Mandelbrot
 import ru.tusur.nativevskotlin1.model.UiState
+import ru.tusur.nativevskotlin1.model2.MandelbrotOptimized
 import ru.tusur.nativevskotlin1.png.buildPNG
 import kotlin.system.measureTimeMillis
 
@@ -24,6 +25,7 @@ const val MAX_ITER:Int=200
 
 
 const val KOTLINPNG:String= "kotlinMandelbrot.png"
+const val KOTLIN2PNG:String= "kotlin2Mandelbrot.png"
 const val  CPPPNG:String ="cppMandelbrot.png"
 
 class AppViewModel( application: Application): AndroidViewModel(application) {
@@ -31,6 +33,7 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private var points: List<Double>?=null
+    private var pointsPrimitiveTypes: List<Double>?=null
     private var pointsCpp: List<Double>?=null
 
 
@@ -53,6 +56,28 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
     private  fun processKotlinCalc(){
         val mandelbrot= Mandelbrot()
         points = mandelbrot.calc( xStart, xEnd, yStart, yEnd, MAX_ITER)
+    }
+
+    // Calculate Mandelbrot with Kotlin
+    //-------------------------------------------
+
+    fun launchKotlinCalcOptimized(){
+
+        viewModelScope.launch {//(Dispatchers.Main) could be used instead of withContext
+            _uiState.update { it.copy(kotlinOptimizedCalcInProgress=true) }
+            val timerKotlinCalc=measureTimeMillis {
+                withContext(Dispatchers.Default) {
+                    processKotlinCalcOptimized()
+                }
+            }
+            _uiState.update { it.copy(kotlinOptimizedCalcInProgress=false,kotlinOptimizedCalcFinished=true,
+                kotlinOptimizedCalcTime = timerKotlinCalc, kotlinOptimizedPointsFound = pointsPrimitiveTypes?.size ?:0) }
+        }
+    }
+
+    private fun processKotlinCalcOptimized(){
+        val mandelbrot= MandelbrotOptimized()
+        pointsPrimitiveTypes = mandelbrot.calc( xStart, xEnd, yStart, yEnd, MAX_ITER)
     }
 
     // Calculate Mandelbrot with C++
@@ -89,6 +114,7 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
             withContext(Dispatchers.Default){
                 if (points!=null && pointsCpp!=null) {
                     buildPNG(points!!, getApplication(), KOTLINPNG)
+                    buildPNG(pointsPrimitiveTypes!!,getApplication(), KOTLIN2PNG)
                     buildPNG(pointsCpp!!,getApplication(), CPPPNG)
                 }
             }

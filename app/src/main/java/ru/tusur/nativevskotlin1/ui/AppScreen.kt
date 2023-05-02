@@ -48,7 +48,8 @@ fun AppScreen(modifier: Modifier=Modifier){
 
         Text(text = "JVM Machine version = ${System.getProperty("java.vm.version")}")
         Text(text= "JAVA Home dir = ${System.getProperty("java.home")}")
-    // Show two button Calculate
+
+    // Show three button Calculate
     //--------------------------------------------------
             if (!uiState.kotlinCalcInProgress && !uiState.pngInProgress) {
                 Button(
@@ -67,6 +68,25 @@ fun AppScreen(modifier: Modifier=Modifier){
                 Text("Time :${uiState.kotlinCalcTime} ms")
                 Text("${uiState.kotlinPointsFound} points found")
             }
+    // Show button Calculate for optimized Kotlin
+    //--------------------------------------------------
+        if (!uiState.kotlinOptimizedCalcInProgress && !uiState.pngInProgress) {
+            Button(
+                modifier = modifier.padding(20.dp),
+                onClick = { viewModel.launchKotlinCalcOptimized() }) {
+                Text(stringResource(R.string.launch_optimized_kotlinButton))
+            }
+        }
+        if (uiState.kotlinOptimizedCalcInProgress) {
+            LoadingAnimation2()
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(stringResource(id = R.string.kotlin_in_progress), fontWeight = FontWeight.Bold)
+        }
+        if (uiState.kotlinOptimizedCalcFinished && !uiState.kotlinOptimizedCalcInProgress) {
+            Text(stringResource(R.string.calc_optimized_finished))
+            Text("Time :${uiState.kotlinOptimizedCalcTime} ms")
+            Text("${uiState.kotlinOptimizedPointsFound} points found")
+        }
     //--------------------------------------------------
     // Calculation process animation
 
@@ -107,6 +127,7 @@ fun AppScreen(modifier: Modifier=Modifier){
 
             if (uiState.pngReady &&
                 File("${LocalContext.current.filesDir}/$KOTLINPNG").exists() &&
+                File("${LocalContext.current.filesDir}/$KOTLIN2PNG").exists()&&
                 File("${LocalContext.current.filesDir}/$CPPPNG").exists()
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
@@ -115,6 +136,14 @@ fun AppScreen(modifier: Modifier=Modifier){
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("${LocalContext.current.filesDir}/$KOTLINPNG")
+                            .build(),
+                        contentDescription = "icon",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.weight(1f)
+                    )
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data("${LocalContext.current.filesDir}/$KOTLIN2PNG")
                             .build(),
                         contentDescription = "icon",
                         contentScale = ContentScale.Fit,
