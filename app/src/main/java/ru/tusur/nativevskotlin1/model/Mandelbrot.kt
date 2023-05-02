@@ -11,7 +11,9 @@ const  val HD_HEIGHT=1280
 class Mandelbrot {
 
     // подготовить vector так как зранее неизвестно количество точек для закрашивания
-    private var points: ArrayList<Double> = ArrayList(300000);
+    //private var points: ArrayList<Double> = ArrayList(300000);
+    private var points=DoubleArray(3000000);
+    var index:Int=0;
 
      fun calc(
         startX : Double,
@@ -20,7 +22,7 @@ class Mandelbrot {
         endY : Double,
         maxIter : Int
     ):List<Double>{
-        points.clear()
+       // points.clear()
         var iterNumb:Int=0; //total iterations
         val stepX:Double
         val stepY:Double
@@ -40,8 +42,13 @@ class Mandelbrot {
                     ++iterNumb
                 }
                 if (sqrAbs(cn)<=4){
-                    points.add(x);
-                    points.add(y);
+
+                   // points.add(x);
+                   // points.add(y);
+                    points[index]=x;
+                    ++index;
+                    points[index]=y;
+                    ++index;
                 }
                 y+=stepY
             }
@@ -50,7 +57,8 @@ class Mandelbrot {
 
         Log.d("Native VS Kotlin","Kotlin iterations number =$iterNumb")
         //return Pair(points.size,points)
-      return points
+
+      return points.asList().subList(0,index+1)
     }
 
 
