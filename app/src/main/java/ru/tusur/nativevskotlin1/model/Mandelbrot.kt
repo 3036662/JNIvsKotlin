@@ -58,7 +58,8 @@ class Mandelbrot {
         Log.d("Native VS Kotlin","Kotlin iterations number =$iterNumb")
         //return Pair(points.size,points)
 
-      return points.asList().subList(0,index+1)
+     // return points.asList().subList(0,index+1)
+         return  points.copyOf(index + 1).asList()
     }
 
 
