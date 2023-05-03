@@ -20,6 +20,7 @@ class MandelbrotOptimized {
         points.clear()
         var iterNumb = 0 //total iterations
 
+
         // Изменить создание переменных step на вычисление внутри цикла for
         val width = HD_WIDTH
         val height = HD_HEIGHT
@@ -50,6 +51,7 @@ class MandelbrotOptimized {
         }
 
         Log.d("Native VS Kotlin", "Kotlin iterations number =$iterNumb")
+        Log.d("nativevskotlin1","Kotlin Complex objetcs created(optimized) =${Complex.counter}")
         return points
     }
 

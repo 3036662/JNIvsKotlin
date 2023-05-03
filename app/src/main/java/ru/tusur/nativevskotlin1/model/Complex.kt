@@ -8,6 +8,14 @@ class Complex( var real:Double=0.0, var imaginary:Double=0.0) {
     operator fun plus(b:Complex):Complex {
         return Complex(real+b.real,imaginary+b.imaginary)
     }
+
+    init {
+        ++counter
+    }
+
+    companion object {
+        var counter=0;
+    }
 }
 
 //square

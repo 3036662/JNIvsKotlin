@@ -15,4 +15,12 @@ data class Complex(var real: Double = 0.0, var im: Double = 0.0) {
 
     // square of number module
     fun sqrAbs() = real * real + im * im
+
+    init {
+        ++counter
+    }
+
+    companion object {
+        var counter=0;
+    }
 }

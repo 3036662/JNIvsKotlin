@@ -47,8 +47,8 @@ class Mandelbrot {
             }
             x+=stepX
         }
-
-        Log.d("Native VS Kotlin","Kotlin iterations number =$iterNumb")
+         Log.d("nativevskotlin1","Kotlin Complex objetcs created =${Complex.counter}")
+        Log.d("nativevskotlin1","Kotlin iterations number =$iterNumb")
         //return Pair(points.size,points)
       return points
     }
