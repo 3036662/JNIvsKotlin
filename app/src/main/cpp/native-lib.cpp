@@ -33,3 +33,21 @@ extern "C" JNIEXPORT jdoubleArray  JNICALL Java_ru_tusur_nativevskotlin1_ui_AppV
 
     return arr;
 }
+extern "C"
+JNIEXPORT jdoubleArray JNICALL
+Java_ru_tusur_nativevskotlin1_ui_AppViewModel_arrFromJNI2(JNIEnv *env, jobject thiz) {
+    // TODO: implement arrFromJNI2()
+    //рассчет
+    Mandelbrot  fractal;
+    // пара -количество элементов в массиве,  указатель на массив точек point
+    std::pair<size_t,double*> points;
+    points=fractal.calcOptimized(X_START,X_END,Y_START,Y_END,MAX_ITER);
+
+    // prepare Array for Java
+
+    jdoubleArray arr=   env->NewDoubleArray(points.first);
+    env->SetDoubleArrayRegion(arr,0,points.first,points.second);
+    //env->ReleaseDoubleArrayElements(arr)
+
+    return arr;
+}

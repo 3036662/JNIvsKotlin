@@ -27,7 +27,7 @@ const val MAX_ITER:Int=200
 const val KOTLINPNG:String= "kotlinMandelbrot.png"
 const val KOTLIN2PNG:String= "kotlin2Mandelbrot.png"
 const val  CPPPNG:String ="cppMandelbrot.png"
-
+const val  CPPPNG2:String ="cppMandelbrot2.png"
 class AppViewModel( application: Application): AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -35,6 +35,7 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
     private var points: List<Double>?=null
     private var pointsPrimitiveTypes: List<Double>?=null
     private var pointsCpp: List<Double>?=null
+    private var pointsCpp2: List<Double>?=null
 
 
     // Calculate Mandelbrot with Kotlin
@@ -93,9 +94,22 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
             _uiState.update { it.copy(nativeCalcInProgress=false,nativeCalcFinished=true, nativeCalcTime = timeCPPCalc, nativePointsFound = pointsCpp?.size ?: 0)  }
         }
     }
+    //C++ calc optimized
+    fun launchNativeCalcOptimized(){
+        viewModelScope.launch {
+            _uiState.update { it.copy(cppOptimizedCalcInProgress =true) }
+            val timeCPPCalc= measureTimeMillis {
+                withContext(Dispatchers.Default) {
+                    processNativeOptimizedCalc()
+                }
+            }
+            _uiState.update { it.copy(cppOptimizedCalcInProgress=false, cppOptimizedCalcFinished = true, cppOptimizedTime = timeCPPCalc, cppOptimizedPointsFound = pointsCpp2?.size ?: 0)  }
+        }
+    }
 
 
     private external fun arrFromJNI(): DoubleArray
+    private external fun arrFromJNI2(): DoubleArray //no complex
 
     private  fun processNativeCalc(){
         val arr=arrFromJNI()
@@ -106,16 +120,29 @@ class AppViewModel( application: Application): AndroidViewModel(application) {
         Log.d("Conversion time","time = $timeConversion")
     }
 
+    //Native Optimized
+    private  fun processNativeOptimizedCalc(){
+        val arr=arrFromJNI2()
+        val timeConversion= measureTimeMillis {
+            val arrList= arr.asList()
+            pointsCpp2=arrList
+        }
+        Log.d("Conversion time","time = $timeConversion")
+    }
+
+
+
     // Create Pngs
     //----------------------------
     fun createPngs(){
         viewModelScope.launch {
             _uiState.update { it.copy(pngInProgress = true) }
             withContext(Dispatchers.Default){
-                if (points!=null && pointsCpp!=null) {
+                if (points!=null && pointsCpp!=null && pointsPrimitiveTypes!=null && pointsCpp2!=null) {
                     buildPNG(points!!, getApplication(), KOTLINPNG)
                     buildPNG(pointsPrimitiveTypes!!,getApplication(), KOTLIN2PNG)
                     buildPNG(pointsCpp!!,getApplication(), CPPPNG)
+                    buildPNG(pointsCpp2!!,getApplication(), CPPPNG2)
                 }
             }
             _uiState.update { it.copy(pngInProgress = false, pngReady = true) }

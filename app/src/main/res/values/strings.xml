@@ -8,4 +8,6 @@
     <string name="calculate_with_cpp">Calculate with C++</string>
     <string name="native_is_calculating">C++  is calculating points...</string>
     <string name="create_png">Create PNGs</string>
+    <string name="calc_with_cppOptimized">Calculate with optimized C++</string>
+    <string name="cpp_optimizedInProgress">C++ optimized is calculating</string>
 </resources>
