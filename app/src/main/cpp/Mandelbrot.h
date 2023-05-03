@@ -13,6 +13,7 @@ class Mandelbrot
 public:
     Mandelbrot();
     std::pair<size_t,double*> calc(const double start_x,const double end_x,const double start_y,const double end_y,unsigned int max_iter);
+    std::pair<size_t,double*> calcOptimized(const double start_x,const double end_x,const double start_y,const double end_y,unsigned int max_iter);
     ~Mandelbrot();
 
 private:

@@ -68,6 +68,8 @@ fun AppScreen(modifier: Modifier=Modifier){
                 Text("Time :${uiState.kotlinCalcTime} ms")
                 Text("${uiState.kotlinPointsFound} points found")
             }
+
+
     // Show button Calculate for optimized Kotlin
     //--------------------------------------------------
         if (!uiState.kotlinOptimizedCalcInProgress && !uiState.pngInProgress) {
@@ -109,7 +111,26 @@ fun AppScreen(modifier: Modifier=Modifier){
                 Text("${uiState.nativePointsFound} points found")
                 Text("Time :${uiState.nativeCalcTime} ms")
             }
+    // C++ with no Complex
+        if (!uiState.cppOptimizedCalcInProgress && !uiState.pngInProgress) {
+            Button(
+                modifier = modifier.padding(20.dp),
+                onClick = { viewModel.launchNativeCalcOptimized() }) {
+                Text(stringResource(R.string.calc_with_cppOptimized))
+            }
+        }
 
+        if (uiState.cppOptimizedCalcInProgress) {
+            LoadingAnimation2()
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(stringResource(R.string.cpp_optimizedInProgress), fontWeight = FontWeight.Bold)
+        }
+
+        if (uiState.cppOptimizedCalcFinished && !uiState.cppOptimizedCalcInProgress) {
+            Text("C++ optimized Mandelbrot calculation is finished")
+            Text("${uiState.cppOptimizedPointsFound} points found")
+            Text("Time :${uiState.cppOptimizedTime} ms")
+        }
     //--------------------------------------------------
     // create Png button
 
@@ -125,10 +146,11 @@ fun AppScreen(modifier: Modifier=Modifier){
 
             // show generated Images
 
-            if (uiState.pngReady &&
+            if (uiState.pngReady && uiState.pngInProgress==false &&
                 File("${LocalContext.current.filesDir}/$KOTLINPNG").exists() &&
                 File("${LocalContext.current.filesDir}/$KOTLIN2PNG").exists()&&
-                File("${LocalContext.current.filesDir}/$CPPPNG").exists()
+                File("${LocalContext.current.filesDir}/$CPPPNG").exists() &&
+                File("${LocalContext.current.filesDir}/$CPPPNG2").exists()
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Row(modifier = Modifier.height(200.dp)) {
@@ -149,9 +171,19 @@ fun AppScreen(modifier: Modifier=Modifier){
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.weight(1f)
                     )
+                }
+                Row(modifier = Modifier.height(200.dp)) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("${LocalContext.current.filesDir}/$CPPPNG")
+                            .build(),
+                        contentDescription = "icon",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.weight(1f)
+                    )
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data("${LocalContext.current.filesDir}/$CPPPNG2")
                             .build(),
                         contentDescription = "icon",
                         contentScale = ContentScale.Fit,
